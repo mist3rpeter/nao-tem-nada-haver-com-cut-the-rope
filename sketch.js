@@ -24,7 +24,8 @@ function preload(){
   blink = loadAnimation("blink_1.png","blink_2.png","blink_3.png");
   eat = loadAnimation("eat_0.png" , "eat_1.png","eat_2.png","eat_3.png","eat_4.png");
   sad = loadAnimation("sad_1.png","sad_2.png","sad_3.png");
-
+  eat.looping= false
+  sad.looping= false
 }
 
 function setup() {
@@ -43,9 +44,13 @@ function setup() {
   faca.position(220,15);
   faca.size(50,50);
   faca.mouseClicked(drop);
-
+  blink.frameDelay= 15
+  eat.frameDelay= 15
+  sad.frameDelay= 15
   coelho = createSprite(250,600,20,20);
   coelho.addAnimation("blink",blink)
+  coelho.addAnimation("eat", eat)
+  coelho.addAnimation("sad", sad)
   coelho.scale=0.2
 
   rectMode(CENTER);
@@ -57,14 +62,37 @@ function setup() {
 function draw() {
   background(51);
   image (fundo,250,350,500,700)
- 
+  
+  drawSprites()
   ground.show();
   corda.show();
+  if(ninja!= null){
   image(kimono,ninja.position.x, ninja.position.y,85,85);
- 
+  }
+  if(newton(ninja, coelho)){
+  coelho.changeAnimation('eat')
+  }
+  if(newton(ninja, ground.body)){
+  coelho.changeAnimation('sad')
+
+  }
   Engine.update(engine);
 }
+function newton(corpo1,corpo2){
+if(corpo1 != null){
 
+
+var d= dist(corpo1.position.x, corpo1.position.y, corpo2.position.x, corpo2.position.y)
+if(d<=80){
+World.remove(world, ninja)
+ninja=null
+return true
+}
+else{
+  return false
+}
+}
+}
 
 function drop(){
   corda.break();
