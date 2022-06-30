@@ -15,7 +15,13 @@ var ninja;
 var kimono, fundo;
 var faca;
 var coelho;
-var blink, eat, sad;
+var blink, eat, sad, link;
+
+var bk_song;  // SOM DO BG
+var cut_sound;  // SOM CORTANTO A CORDA
+var sad_sound;  // SOM TRISTE
+var eating_sound; // SOM COMENDO
+var air;  /// SOM DO AR
 
 function preload(){
   kimono= loadImage('melao.png');
@@ -24,8 +30,15 @@ function preload(){
   blink = loadAnimation("blink_1.png","blink_2.png","blink_3.png");
   eat = loadAnimation("eat_0.png" , "eat_1.png","eat_2.png","eat_3.png","eat_4.png");
   sad = loadAnimation("sad_1.png","sad_2.png","sad_3.png");
-  eat.looping= false
-  sad.looping= false
+
+  bk_song = loadSound('sound1.mp3');
+  sad_sound = loadSound("sad.wav")
+  cut_sound = loadSound('rope_cut.mp3');
+  eating_sound = loadSound('eating_sound.mp3');
+  air = loadSound('air.wav');
+
+  eat.looping= false;
+  sad.looping= false;
 }
 
 function setup() {
@@ -57,41 +70,49 @@ function setup() {
   ellipseMode(RADIUS);
   imageMode(CENTER);
   textSize(50);
+
+  //-*--
+  blower = createImg('balloon.png');
+  blower.position(10,250);
+  blower.size(150,100);
+ 
 }
 
 function draw() {
   background(51);
+  Engine.update(engine);
   image (fundo,250,350,500,700)
-  
-  drawSprites()
+  drawSprites();
   ground.show();
   corda.show();
+
   if(ninja!= null){
-  image(kimono,ninja.position.x, ninja.position.y,85,85);
+   image(kimono,ninja.position.x, ninja.position.y,85,85);
   }
   if(newton(ninja, coelho)){
-  coelho.changeAnimation('eat')
+    coelho.changeAnimation('eat') 
   }
-  if(newton(ninja, ground.body)){
-  coelho.changeAnimation('sad')
-
+ 
+  if(ninja!=null && ninja.position.y>=650) {
+    coelho.changeAnimation('sad');
+    bk_song.stop();
+    ninja=null;
   }
-  Engine.update(engine);
+ 
 }
+
 function newton(corpo1,corpo2){
-if(corpo1 != null){
-
-
-var d= dist(corpo1.position.x, corpo1.position.y, corpo2.position.x, corpo2.position.y)
-if(d<=80){
-World.remove(world, ninja)
-ninja=null
-return true
-}
-else{
-  return false
-}
-}
+  if(corpo1 != null){
+    var d= dist(corpo1.position.x, corpo1.position.y, corpo2.position.x, corpo2.position.y)
+  if(d<=80){
+    World.remove(world, ninja)
+    ninja=null
+    return true
+  }
+  else{
+    return false
+  }
+  }
 }
 
 function drop(){
@@ -99,6 +120,3 @@ function drop(){
   link.break();
   link=null;
 }
-
-
-
