@@ -32,7 +32,7 @@ function preload(){
   sad = loadAnimation("sad_1.png","sad_2.png","sad_3.png");
 
   bk_song = loadSound('sound1.mp3');
-  sad_sound = loadSound("sad.wav")
+  sad_sound = loadSound("sad.wav");
   cut_sound = loadSound('rope_cut.mp3');
   eating_sound = loadSound('eating_sound.mp3');
   air = loadSound('air.wav');
@@ -75,7 +75,13 @@ function setup() {
   blower = createImg('balloon.png');
   blower.position(10,250);
   blower.size(150,100);
- 
+  blower.mouseClicked(qdb);
+
+  mute = createImg('mute.png');
+  mute.position(400,125);
+  mute.size(60,60);
+  mute.mouseClicked(biblioteca);
+
 }
 
 function draw() {
@@ -85,18 +91,21 @@ function draw() {
   drawSprites();
   ground.show();
   corda.show();
-
   if(ninja!= null){
    image(kimono,ninja.position.x, ninja.position.y,85,85);
   }
   if(newton(ninja, coelho)){
-    coelho.changeAnimation('eat') 
+    coelho.changeAnimation('eat');
+    eating_sound.play();
+
   }
  
   if(ninja!=null && ninja.position.y>=650) {
     coelho.changeAnimation('sad');
     bk_song.stop();
     ninja=null;
+    sad_sound.play();
+    sad_sound.setVolume(0.1);
   }
  
 }
@@ -119,4 +128,25 @@ function drop(){
   corda.break();
   link.break();
   link=null;
+  cut_sound.play();
+}
+
+function qdb(){
+Matter.Body.applyForce(ninja,{x:0,y:0},{x:99.99,y:0});
+air.play();
+air.setVolume(0.1)
+}
+function biblioteca(){
+if(bk_song.isPlaying()){
+bk_song.stop()
+
+}
+else{
+bk_song.play()
+bk_song.setVolume(0.1)
+
+
+}
+
+
 }
