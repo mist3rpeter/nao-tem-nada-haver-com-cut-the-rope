@@ -132,7 +132,7 @@ function drop(){
 }
 
 function qdb(){
-Matter.Body.applyForce(ninja,{x:0,y:0},{x:99.99,y:0});
+Matter.Body.applyForce(ninja,{x:0,y:0},{x:0.03,y:0});
 air.play();
 air.setVolume(0.1)
 }
