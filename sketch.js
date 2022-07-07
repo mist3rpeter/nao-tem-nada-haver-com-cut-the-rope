@@ -23,6 +23,8 @@ var sad_sound;  // SOM TRISTE
 var eating_sound; // SOM COMENDO
 var air;  /// SOM DO AR
 
+var button2, button3,rope2, rope3, fruit_con_2 , fruit_con_3;
+
 function preload(){
   kimono= loadImage('melao.png');
   fundo = loadImage("bkgd.png");
@@ -49,17 +51,36 @@ function setup() {
 
   ground = new Ground(200,690,600,20);
   corda= new Rope(8,{x:250, y:10});
+  rope2 = new Rope(7,{x:370,y:40});
+  rope3 = new Rope(4,{x:400,y:225});
   ninja= Bodies.circle(250,250,20);
   Matter.Composite.add(corda.body, ninja);
   link= new dam(corda,ninja);
+  fruit_con_2 = new dam(rope2,ninja);
+  fruit_con_3 = new dam(rope3,ninja);
 
   faca= createImg('cut.png');
   faca.position(220,15);
   faca.size(50,50);
   faca.mouseClicked(drop);
+
+  //botão 2
+  button2 = createImg('cut.png');
+  button2.position(330,35);
+  button2.size(60,60);
+  button2.mouseClicked(drop2);
+
+  //botão 3
+  button3 = createImg('cut.png');
+  button3.position(360,200);
+  button3.size(60,60);
+  button3.mouseClicked(drop3);
+
+
   blink.frameDelay= 15
   eat.frameDelay= 15
   sad.frameDelay= 15
+
   coelho = createSprite(250,600,20,20);
   coelho.addAnimation("blink",blink)
   coelho.addAnimation("eat", eat)
@@ -91,6 +112,9 @@ function draw() {
   drawSprites();
   ground.show();
   corda.show();
+  rope2.show();
+  rope3.show();
+  
   if(ninja!= null){
    image(kimono,ninja.position.x, ninja.position.y,85,85);
   }
@@ -130,6 +154,20 @@ function drop(){
   link=null;
   cut_sound.play();
 }
+
+function drop2(){
+  cut_sound.play();   
+  rope2.break();
+  fruit_con_2.break();
+  fruit_con_2 = null; 
+}
+function drop3(){
+  cut_sound.play();   
+  rope3.break();
+  fruit_con_3.break();
+  fruit_con_3 = null; 
+}
+
 
 function qdb(){
 Matter.Body.applyForce(ninja,{x:0,y:0},{x:99.99,y:0});
